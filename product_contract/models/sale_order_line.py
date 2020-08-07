@@ -107,17 +107,16 @@ class SaleOrderLine(models.Model):
                     rec.product_id.recurring_invoicing_type
                 )
                 rec.date_start = rec.date_start or fields.Date.today()
-
-                rec.date_end = (
-                    rec.date_start
-                    + contract_line_model.get_relative_delta(
-                        rec._get_auto_renew_rule_type(),
-                        int(rec.product_uom_qty),
-                    )
-                    - relativedelta(days=1)
-                )
                 rec.is_auto_renew = rec.product_id.is_auto_renew
                 if rec.is_auto_renew:
+                    rec.date_end = (
+                        rec.date_start
+                        + contract_line_model.get_relative_delta(
+                            rec._get_auto_renew_rule_type(),
+                            int(rec.product_uom_qty),
+                        )
+                        - relativedelta(days=1)
+                    )
                     rec.auto_renew_interval = (
                         rec.product_id.auto_renew_interval
                     )
